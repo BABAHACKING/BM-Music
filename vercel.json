@@ -5,7 +5,7 @@
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/$1"
+            "destination": "/backend/public/$1"
         }
     ]
 }
