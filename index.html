@@ -1,13 +1,950 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta http-equiv="refresh" content="0; url=/backend/public/index.html">
-    <script>window.location.href = "/backend/public/index.html"</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baba Music – Pure Cloud Vibes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="utility.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <p>Redirecting to Baba Music...</p>
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="left" id="sidebar">
+            <div class="home bg-surface rounded-lg">
+                <div class="logo"><img src="logo.svg" alt="Baba Music Logo"></div>
+                <ul>
+                    <li><img class="invert" src="home.svg" alt="">Home</li>
+                    <div class="search-bar">
+                        <span class="search-icon"></span>
+                        <input type="text" class="search-input" placeholder="Search songs...">
+                    </div>
+                </ul>
+            </div>
+
+            <div class="favorites-section bg-surface rounded-lg">
+                <div class="heading">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#1DB954"
+                        stroke="#1DB954" stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                    <h2><a href="my-heart.html" style="color:inherit;text-decoration:none;">My Heart</a> <span
+                            id="favCount" class="fav-count">0</span></h2>
+                </div>
+                <div class="fav-list" id="favList">
+                    <p class="fav-empty" id="favEmpty">No songs yet — tap ❤️ to add to My Heart!</p>
+                </div>
+            </div>
+
+            <div class="Library bg-surface rounded-lg">
+                <div class="heading">
+                    <img class="invert" src="playlist.svg" alt="">
+                    <h2>Your Library</h2>
+                </div>
+                <div class="songlist">
+                    <ul></ul>
+                </div>
+            </div>
+
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="right">
+            <div class="header">
+                <div class="nav">
+                    <img class="hamburger" id="hamburgerBtn" src="hamburger.svg" alt="Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
+                        <path d="M17 4L8.66943 10.0405C6.44352 11.6545 6.44353 12.3455 8.66943 13.9595L17 20"
+                            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
+                        <path d="M7 4L15.3306 10.0405C17.5565 11.6545 17.5565 12.3455 15.3306 13.9595L7 20"
+                            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+
+                <!-- NEW: Vibe Check & Theme Picker -->
+                <div class="vibe-controls"
+                    style="display:flex;gap:15px;align-items:center;margin-left:auto;margin-right:20px;">
+                    <div class="vibe-filters" style="display:flex;gap:8px;">
+                        <button class="vibe-btn" data-mood="all" title="All Vibes">✨ All</button>
+                        <button class="vibe-btn" data-mood="sad" title="Sad Hours">😭 Sad</button>
+                        <button class="vibe-btn" data-mood="hype" title="Get Hype">🔥 Hype</button>
+                        <button class="vibe-btn" data-mood="chill" title="Chill Vibes">💤 Chill</button>
+                    </div>
+                    <div class="theme-picker" style="display:flex;gap:5px;align-items:center;">
+                        <button class="theme-dot" style="background:#1DB954;" onclick="setTheme('#1DB954')"
+                            title="Spotify Green"></button>
+                        <button class="theme-dot" style="background:#FF0055;" onclick="setTheme('#FF0055')"
+                            title="Electric Pink"></button>
+                        <button class="theme-dot" style="background:#00E5FF;" onclick="setTheme('#00E5FF')"
+                            title="Cyber Blue"></button>
+                        <button class="theme-dot" style="background:#FF9900;" onclick="setTheme('#FF9900')"
+                            title="Sunset Orange"></button>
+                        <input type="color" id="customThemePicker"
+                            style="width:24px;height:24px;border:none;padding:0;background:none;cursor:pointer;"
+                            title="Custom Color">
+                    </div>
+                </div>
+
+                <div class="button">
+                    <button id="btnSignup" class="Signupbtn" onclick="window.location.href='loging.html#signup'">Sign
+                        up</button>
+                    <button id="btnLogin" class="Logingbtn" onclick="window.location.href='loging.html'">Log in</button>
+                    <button id="btnLogout" class="Logingbtn" style="display:none;" onclick="signOut()">Log out</button>
+                </div>
+            </div>
+
+            <div class="spotifyplaylists">
+
+                <!-- DAILY DROP FEATURE -->
+                <div class="daily-drop" id="dailyDrop" onclick="playMusic('Aayi Nai - Stree 2 320 Kbps.mp3')">
+                    <!-- Using an existing song for demo -->
+                    <div class="drop-badge">🔥 DAILY DROP</div>
+                    <div class="drop-content">
+                        <img src="https://images.hindustantimes.com/img/2024/07/24/1600x900/aaj_ki_raat_stree_2_1721817452391_1721817452589.jpg"
+                            alt="Song of the Day" loading="lazy" decoding="async">
+                        <div class="drop-info">
+                            <h3>Song of the Day</h3>
+                            <h2>Aaj Ki Raat (Stree 2)</h2>
+                            <p>Trending 🔥 • 2.4M Plays</p>
+                            <div class="countdown-timer">Next drop in: <span id="dropTimer">04:20:00</span></div>
+                        </div>
+                        <div class="drop-play">
+                            <button class="play-btn-large">▶ Play Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h1>Baba Music</h1>
+                <div class="cardcontainer" id="custom-playlists">
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-happy-hits">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&h=300&fit=crop"
+                            alt="Happy Hits" loading="lazy" decoding="async">
+                        <h2>Happy Hits!</h2>
+                        <p>Hits to boost your mood and fill you with happiness</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-feel-good">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/retro-vibes.jpg" alt="Retro Vibes" loading="lazy" decoding="async">
+                        <h2>Indian Nostalgia</h2>
+                        <p>Old school bollywood aesthetics 📼</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'arjit-hits.html')" id="card-arijit">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/sad-boy.jpg" alt="Arijit Singh Hits" loading="lazy" decoding="async">
+                        <h2>Arijit Singh Hits</h2>
+                        <p>Sad boi hours 🌧️💔</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-bhojpuri">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/party-vibes.jpg" alt="Bhojpuri Hits" loading="lazy" decoding="async">
+                        <h2>Bhojpuri Hits</h2>
+                        <p>Full power party vibes 💥💃</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-chill">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/anime-scenery.jpg" alt="Chill Mode" loading="lazy" decoding="async">
+                        <h2>Chill Mode</h2>
+                        <p>Relaxing anime scenery ☁️</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-workout">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/gym-neon.jpg" alt="Workout Energy" loading="lazy" decoding="async">
+                        <h2>Workout Energy</h2>
+                        <p>Go Super Saiyan in the gym! ⚡💪</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-latenight">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/cyberpunk-city.jpg" alt="Late Night Vibes" loading="lazy"
+                            decoding="async">
+                        <h2>Late Night Vibes</h2>
+                        <p>Midnight cyberpunk vibes 🌃</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-desi">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/desi-vibes.jpg" alt="Desi Classics" loading="lazy" decoding="async">
+                        <h2>Desi Classics</h2>
+                        <p>Golden era vibes & vintage soul 📻</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-roadtrip">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/car-sunset.jpg" alt="Road Trip" loading="lazy" decoding="async">
+                        <h2>Road Trip Mix</h2>
+                        <p>Driving into the sunset 🚗💨</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-romantic">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/romantic-hits.jpg" alt="Romantic Hits" loading="lazy" decoding="async">
+                        <h2>Romantic Hits</h2>
+                        <p>POV: You're the main character in love ❤️</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-lofi">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/lofi-chill.jpg" alt="Lo-Fi Chill" loading="lazy" decoding="async">
+                        <h2>Lo-Fi Chill</h2>
+                        <p>Study, relax, and vibe with these aesthetic beats</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- New Cards -->
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-phonk">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/phonk-drift.jpg" alt="Phonk Drift" loading="lazy" decoding="async">
+                        <h2>Phonk / Drift</h2>
+                        <p>JDM cars & neon drift vibes 🔰💨</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-coffee">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/morning-coffee.jpg" alt="Morning Coffee" loading="lazy"
+                            decoding="async">
+                        <h2>Morning Coffee</h2>
+                        <p>Cozy cafe vibes & acoustic chill ☕📚</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-sleep">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/sleep-stories.jpg" alt="Sleep Stories" loading="lazy" decoding="async">
+                        <h2>Sleep Stories</h2>
+                        <p>Drift into dreams with starry nights 🌙✨</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-villain">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/villain-arc.jpg" alt="Villain Arc" loading="lazy" decoding="async">
+                        <h2>Villain Arc</h2>
+                        <p>Entering my reputation era 😈🖤</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="card" onclick="goToPlaylist(this, 'happy-hits.html')" id="card-ghibli">
+                        <div class="play">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M8 5.14v13.72a1 1 0 001.5.86l11.04-6.86a1 1 0 000-1.72L9.5 4.28a1 1 0 00-1.5.86z" />
+                            </svg>
+                        </div>
+                        <img src="assets/images/ghibli-garden.jpg" alt="Ghibli Garden" loading="lazy" decoding="async">
+                        <h2>Ghibli Garden</h2>
+                        <p>Cottagecore nature & soft piano 🌿🎹</p>
+                        <button class="card-heart" onclick="event.stopPropagation(); toggleCardHeart(this)"
+                            title="Save to My Heart">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                    stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Gengy Footer -->
+                <footer class="main-footer">
+                    <div class="footer-content">
+                        <div class="footer-brand">
+                            <h3>Baba Music</h3>
+                            <p>Built different 😤</p>
+                        </div>
+                        <div class="footer-links">
+                            <div class="footer-col">
+                                <h4>Socials</h4>
+                                <a href="https://www.instagram.com/r_vi_s1?igsh=MWJ3bGpzdmw2YjZhZg=="
+                                    target="_blank">Instagram 📸</a>
+                                <a href="https://www.linkedin.com/in/ravi-sonkar-4156822ba" target="_blank">LinkedIn
+                                    �</a>
+                                <a href="#">Discord 👾</a>
+                                <a href="#">TikTok 🎵</a>
+                            </div>
+                            <div class="footer-col">
+                                <h4>Community</h4>
+                                <a href="#">Request Song 📝</a>
+                                <a href="#">Submit Playlist 💿</a>
+                                <a href="#">DM for Promo 📩</a>
+                                <a href="resources.html">Free Resources 📚</a>
+                            </div>
+                            <div class="footer-col">
+                                <h4>Legal & Safety</h4>
+                                <a href="legal.html">Legal ⚖️</a>
+                                <a href="safety.html">Safety & Privacy 🔒</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <p>&copy; 2024 Baba Music. All rights reserved (kinda).</p>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Play Bar -->
+    <div class="playBar" id="playbar">
+        <div class="abovebar">
+            <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
+                <div class="songsinfo"></div>
+                <button class="heart-btn" id="playbarHeart" data-song="" title="Add to favorites">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path class="heart-outline"
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                            stroke-width="2" />
+                    </svg>
+                </button>
+            </div>
+            <div class="songsbutton">
+                <img id="privious" src="privious.svg" alt="Previous">
+                <img id="play" src="play.svg" alt="Play">
+                <img id="next" src="next.svg" alt="Next">
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="songtime"></div>
+                <div class="volume">
+                    <img width="20" src="volume.svg" alt="Volume" class="invert">
+                    <div class="range">
+                        <input type="range" name="volume" min="0" max="100" value="50">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <canvas id="visualizer" class="visualizer-canvas"></canvas>
+        <div class="seekbar">
+            <div class="circle"></div>
+        </div>
+        <button id="vizToggle" class="viz-toggle" title="Toggle Visualizer">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="12" width="2" height="6" rx="1" />
+                <rect x="7" y="8" width="2" height="10" rx="1" />
+                <rect x="11" y="5" width="2" height="16" rx="1" />
+                <rect x="15" y="9" width="2" height="8" rx="1" />
+                <rect x="19" y="11" width="2" height="6" rx="1" />
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        // Pass card image & title to playlist page
+        function goToPlaylist(card, page) {
+            const img = card.querySelector('img:not(.play svg)').src;
+            const title = card.querySelector('h2').textContent;
+            window.location.href = `${page}?img=${encodeURIComponent(img)}&title=${encodeURIComponent(title)}`;
+        }
+
+        // Save/unsave playlist card to My Heart
+        function toggleCardHeart(btn) {
+            const card = btn.closest('.card');
+            const title = card.querySelector('h2').textContent;
+            const img = card.querySelector('img').src;
+            let saved = JSON.parse(localStorage.getItem('babaHeartCards') || '[]');
+
+            const exists = saved.find(s => s.title === title);
+            if (exists) {
+                saved = saved.filter(s => s.title !== title);
+                btn.classList.remove('saved');
+            } else {
+                saved.push({ title, img, type: 'playlist' });
+                btn.classList.add('saved');
+            }
+            localStorage.setItem('babaHeartCards', JSON.stringify(saved));
+            renderHeartSection();
+        }
+
+        // Render the My Heart main section
+        function renderHeartSection() {
+            const container = document.getElementById('heartCardsContainer');
+            const countEl = document.getElementById('heartSectionCount');
+            const emptyEl = document.getElementById('heartEmpty');
+            if (!container) return;
+
+            // Get saved playlists
+            const savedCards = JSON.parse(localStorage.getItem('babaHeartCards') || '[]');
+            // Get saved songs
+            const savedSongs = JSON.parse(localStorage.getItem('babaFavorites') || '[]');
+
+            const total = savedCards.length + savedSongs.length;
+            countEl.textContent = total;
+
+            // Clear existing cards (keep empty message)
+            container.querySelectorAll('.heart-song-card').forEach(el => el.remove());
+
+            if (total === 0) {
+                emptyEl.style.display = '';
+                return;
+            }
+            emptyEl.style.display = 'none';
+
+            // Render saved songs
+            savedSongs.forEach(songName => {
+                const card = document.createElement('div');
+                card.className = 'heart-song-card';
+                card.innerHTML = `
+                    <div class="heart-card-icon">🎵</div>
+                    <div class="heart-card-title">${songName.replace('.mp3', '')}</div>
+                    <div class="heart-card-type">Song</div>
+                    <button class="heart-card-remove" title="Remove">✕</button>
+                `;
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('.heart-card-remove')) return;
+                    if (typeof playMusic === 'function') playMusic(songName);
+                });
+                card.querySelector('.heart-card-remove').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (typeof toggleFavorite === 'function') toggleFavorite(songName);
+                    renderHeartSection();
+                });
+                container.appendChild(card);
+            });
+
+            // Render saved playlists
+            savedCards.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'heart-song-card';
+                card.innerHTML = `
+                    <div class="heart-card-icon">📀</div>
+                    <div class="heart-card-title">${item.title}</div>
+                    <div class="heart-card-type">Playlist</div>
+                    <button class="heart-card-remove" title="Remove">✕</button>
+                `;
+                card.querySelector('.heart-card-remove').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    let saved = JSON.parse(localStorage.getItem('babaHeartCards') || '[]');
+                    saved = saved.filter(s => s.title !== item.title);
+                    localStorage.setItem('babaHeartCards', JSON.stringify(saved));
+                    // Also update the card heart button
+                    document.querySelectorAll('.card').forEach(c => {
+                        if (c.querySelector('h2')?.textContent === item.title) {
+                            c.querySelector('.card-heart')?.classList.remove('saved');
+                        }
+                    });
+                    renderHeartSection();
+                });
+                container.appendChild(card);
+            });
+        }
+
+        // Load saved card hearts on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = JSON.parse(localStorage.getItem('babaHeartCards') || '[]');
+            document.querySelectorAll('.card').forEach(card => {
+                const title = card.querySelector('h2').textContent;
+                if (saved.find(s => s.title === title)) {
+                    card.querySelector('.card-heart').classList.add('saved');
+                }
+            });
+            renderHeartSection();
+        });
+    </script>
+    <style>
+        /* Vibe Buttons */
+        .vibe-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+        }
+
+        .vibe-btn:hover,
+        .vibe-btn.active {
+            background: var(--color-accent);
+            color: #000;
+            font-weight: 700;
+            border-color: var(--color-accent);
+        }
+
+        /* Theme Dots */
+        .theme-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .theme-dot:hover {
+            transform: scale(1.2);
+            border-color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .vibe-controls {
+                display: none !important;
+                /* Hide on mobile for simplicity or stack it */
+            }
+        }
+    </style>
+
+    <style>
+        /* Daily Drop Styles */
+        .daily-drop {
+            background: linear-gradient(135deg, #1e3a8a, #9333ea);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .daily-drop:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .drop-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #FF0055;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .drop-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .drop-content img {
+            width: 100px;
+            height: 100px;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .drop-info h3 {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .drop-info h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .drop-info p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .countdown-timer {
+            font-family: monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .play-btn-large {
+            background: #1DB954;
+            color: black;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 24px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.1s;
+            margin-left: auto;
+        }
+
+        .play-btn-large:hover {
+            transform: scale(1.05);
+            background: #1ed760;
+        }
+
+        @media(max-width: 600px) {
+            .drop-content {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+
+            .play-btn-large {
+                margin: 0;
+            }
+        }
+    </style>
+
+    <script>
+        // Start Countdown
+        function startCountdown() {
+            const timerEl = document.getElementById('dropTimer');
+            // Check if element exists before accessing properties
+            if (!timerEl) return;
+
+            // Set target to next midnight or just a fixed 4 hours from now for demo
+            let duration = 4 * 60 * 60 + 20 * 60; // 4h 20m
+
+            setInterval(() => {
+                duration--;
+                if (duration < 0) duration = 3600; // Reset just in case
+
+                const h = Math.floor(duration / 3600);
+                const m = Math.floor((duration % 3600) / 60);
+                const s = duration % 60;
+
+                timerEl.textContent =
+                    `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            }, 1000);
+        }
+        startCountdown();
+
+        // Vibe Check Logic
+        document.querySelectorAll('.vibe-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all
+                document.querySelectorAll('.vibe-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const mood = btn.dataset.mood;
+                filterByMood(mood);
+            });
+        });
+
+        function filterByMood(mood) {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                if (mood === 'all') {
+                    card.style.display = 'block';
+                    return;
+                }
+
+                // Simple keyword matching for demo purposes
+                const text = (card.innerText + card.id).toLowerCase();
+                let match = false;
+
+                if (mood === 'sad' && (text.includes('sad') || text.includes('lonely') || text.includes('heart') || text.includes('arijit'))) match = true;
+                if (mood === 'hype' && (text.includes('party') || text.includes('workout') || text.includes('bhojpuri') || text.includes('stree'))) match = true;
+                if (mood === 'chill' && (text.includes('chill') || text.includes('relax') || text.includes('lo-fi') || text.includes('vibe'))) match = true;
+
+                card.style.display = match ? 'block' : 'none';
+            });
+        }
+    </script>
+    <script src="theme.js"></script>
+    <script src="script.js"></script>
+    <style>
+        /* Gengy Footer Styles */
+        .main-footer {
+            margin-top: 50px;
+            padding: 40px 20px;
+            background: linear-gradient(to top, #000000, rgba(18, 18, 18, 0));
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            max-width: 900px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-brand p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 50px;
+        }
+
+        .footer-col h4 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: #b3b3b3;
+            text-decoration: none;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: var(--color-accent, #1DB954);
+            transform: translateX(5px);
+            text-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 600px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 20px;
+                align-items: center;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="frontend-auth.js?v=999"></script>
+    <script src="script.js?v=999"></script>
+    <script src="theme.js?v=999"></script>
 </body>
 
 </html>

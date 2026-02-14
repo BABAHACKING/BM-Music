@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log in – Baba Music</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: rgba(255, 255, 255, 0.04);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #1DB954;
+      --accent-glow: rgba(29, 185, 84, 0.3);
+      --purple: #8B5CF6;
+      --pink: #EC4899;
+      --blue: #3B82F6;
+      --orange: #F97316;
+      --text: #ffffff;
+      --text-dim: #a1a1aa;
+      --text-muted: #52525b;
+      --input-bg: rgba(255, 255, 255, 0.06);
+      --input-border: rgba(255, 255, 255, 0.1);
+      --radius: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    /* ===== ANIMATED BACKGROUND ===== */
+    .bg-blobs {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.5;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .blob-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--purple);
+      top: -10%;
+      left: -5%;
+      animation-delay: 0s;
+    }
+
+    .blob-2 {
+      width: 350px;
+      height: 350px;
+      background: var(--pink);
+      bottom: -10%;
+      right: -5%;
+      animation-delay: -2s;
+    }
+
+    .blob-3 {
+      width: 300px;
+      height: 300px;
+      background: var(--accent);
+      top: 50%;
+      left: 60%;
+      animation-delay: -4s;
+    }
+
+    .blob-4 {
+      width: 250px;
+      height: 250px;
+      background: var(--blue);
+      top: 20%;
+      right: 20%;
+      animation-delay: -6s;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      25% {
+        transform: translate(30px, -40px) scale(1.1);
+      }
+
+      50% {
+        transform: translate(-20px, 20px) scale(0.95);
+      }
+
+      75% {
+        transform: translate(40px, 30px) scale(1.05);
+      }
+    }
+
+    /* ===== MAIN CONTAINER ===== */
+    .page {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      width: 100%;
+      max-width: 460px;
+    }
+
+    /* ===== LOGO ===== */
+    .logo-area {
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .logo-area svg {
+      width: 56px;
+      height: 56px;
+    }
+
+    .logo-area p {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ===== GLASS CARD ===== */
+    .auth-card {
+      width: 100%;
+      background: var(--card);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4), inset 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    /* ===== FORM HEADER ===== */
+    .form-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .form-header .emoji {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .form-header h1 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--text), var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .form-header p {
+      margin-top: 8px;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* ===== INPUTS ===== */
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .field input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .field input:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.2s;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      color: #fff;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .btn-primary:hover::before {
+      opacity: 1;
+    }
+
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    /* ===== SOCIAL LOGIN ===== */
+    .social-section {
+      margin-top: 24px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--card-border);
+    }
+
+    .divider span {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .social-btns {
+      display: flex;
+      gap: 12px;
+    }
+
+    .social-btn {
+      flex: 1;
+      padding: 12px;
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      font-family: inherit;
+    }
+
+    .social-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* ===== ERROR/SUCCESS ===== */
+    .msg {
+      text-align: center;
+      font-size: 0.85rem;
+      padding: 10px 16px;
+      border-radius: 10px;
+      margin-top: 16px;
+      display: none;
+    }
+
+    .msg-error {
+      color: #f87171;
+      background: rgba(248, 113, 113, 0.08);
+    }
+
+    .msg-success {
+      color: var(--accent);
+      background: rgba(29, 185, 84, 0.08);
+    }
+
+    /* ===== SWITCH LINK ===== */
+    .switch {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .switch a {
+      color: var(--purple);
+      text-decoration: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .switch a:hover {
+      color: var(--pink);
+    }
+
+    /* ===== BACK LINK ===== */
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-top: 20px;
+      transition: color 0.2s;
+    }
+
+    .back:hover {
+      color: var(--text);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .hidden {
+      display: none !important;
+    }
+
+    .form-container {
+      animation: slideUp 0.35s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ===== CHECKBOX ===== */
+    .remember {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 0 4px;
+    }
+
+    .remember input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .remember label {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      cursor: pointer;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 28px 20px;
+        border-radius: 20px;
+      }
+
+      .form-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .blob {
+        opacity: 0.3;
+      }
+
+      .social-btns {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Animated background blobs -->
+  <div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
+  </div>
+
+  <div class="page">
+    <!-- Logo -->
+    <div class="logo-area">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <circle cx="60" cy="60" r="56" fill="#1DB954" />
+        <text x="60" y="48" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="32"
+          fill="white">BM</text>
+        <path d="M38 62 C38 62, 44 58, 60 58 C76 58, 82 62, 82 62" stroke="white" stroke-width="4"
+          stroke-linecap="round" fill="none" />
+        <path d="M44 72 C44 72, 50 68, 60 68 C70 68, 76 72, 76 72" stroke="white" stroke-width="3.5"
+          stroke-linecap="round" fill="none" />
+        <path d="M50 81 C50 81, 54 78, 60 78 C66 78, 70 81, 70 81" stroke="white" stroke-width="3"
+          stroke-linecap="round" fill="none" />
+      </svg>
+      <p>Baba Music</p>
+    </div>
+
+    <div class="auth-card">
+      <!-- ===== LOGIN ===== -->
+      <div id="loginForm" class="form-container">
+        <div class="form-header">
+          <span class="emoji">🎧</span>
+          <h1>Welcome back!</h1>
+          <p>Log in and vibe with your fav tracks ✨</p>
+        </div>
+
+        <form>
+          <div class="field">
+            <label>Email or Username</label>
+            <input type="text" id="loginUsername" placeholder="your@email.com" required>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="••••••••" required>
+          </div>
+          <div class="remember">
+            <input type="checkbox" id="rememberMe">
+            <label for="rememberMe">Remember me</label>
+          </div>
+          <button type="submit" class="btn-primary"><span>Let's Go 🚀</span></button>
+        </form>
+
+        <p id="loginError" class="msg msg-error"></p>
+
+        <div class="social-section">
+          <div class="divider"><span>or continue with</span></div>
+          <div class="social-btns">
+            <button class="social-btn" title="Google">🔵</button>
+            <button class="social-btn" title="Apple">🍎</button>
+            <button class="social-btn" title="Facebook">💙</button>
+          </div>
+        </div>
+
+        <p class="switch">
+          New here? <a href="#" onclick="showSignup()">Create account</a><br>
+          <a href="#" onclick="showForgot()" style="font-weight:500;font-size:0.85rem;">Forgot password?</a>
+        </p>
+      </div>
+
+      <!-- ===== SIGNUP ===== -->
+      <div id="signupForm" class="form-container hidden">
+        <div class="form-header">
+          <span class="emoji">🎤</span>
+          <h1>Join the vibe</h1>
+          <p>Create your Baba Music account fr fr 🔥</p>
+        </div>
+
+        <form>
+          <div class="field">
+            <label>What should we call you?</label>
+            <input type="text" id="signupUsername" placeholder="Your cool name" required>
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="signupEmail" placeholder="your@email.com" required>
+          </div>
+          <div class="field">
+            <label>Create Password</label>
+            <input type="password" id="signupPassword" placeholder="Make it strong 💪" required>
+          </div>
+          <button type="submit" class="btn-primary"><span>Sign Me Up ✌️</span></button>
+        </form>
+
+        <p id="signupError" class="msg msg-error"></p>
+
+        <p class="switch">
+          Already got an account? <a href="#" onclick="showLogin()">Log in</a>
+        </p>
+      </div>
+
+      <!-- ===== FORGOT PASSWORD ===== -->
+      <div id="forgotForm" class="form-container hidden">
+        <div class="form-header">
+          <span class="emoji">🔑</span>
+          <h1>Reset password</h1>
+          <p>No cap, we'll send a reset link 📩</p>
+        </div>
+
+        <form>
+          <div class="field">
+            <label>Your Email</label>
+            <input type="email" id="forgotEmail" placeholder="your@email.com" required>
+          </div>
+          <button type="submit" class="btn-primary"><span>Send Reset Link 📬</span></button>
+        </form>
+
+        <p id="forgotMsg" class="msg msg-success"></p>
+
+        <p class="switch">
+          Remember it? <a href="#" onclick="showLogin()">Back to login</a>
+        </p>
+      </div>
+    </div>
+
+    <a href="index.html" class="back">← Back to Baba Music</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="frontend-auth.js"></script>
+  <script>
+    const showLogin = () => {
+      document.getElementById('loginForm').classList.remove('hidden');
+      document.getElementById('signupForm').classList.add('hidden');
+      document.getElementById('forgotForm').classList.add('hidden');
+    };
+
+    const showSignup = () => {
+      document.getElementById('signupForm').classList.remove('hidden');
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('forgotForm').classList.add('hidden');
+    };
+
+    const showForgot = () => {
+      document.getElementById('forgotForm').classList.remove('hidden');
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('signupForm').classList.add('hidden');
+    };
+
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const parentId = form.parentElement.id;
+
+        // LOGIN LOGIC
+        if (parentId === 'loginForm') {
+          const email = document.getElementById('loginUsername').value;
+          const pass = document.getElementById('loginPassword').value;
+          const errorEl = document.getElementById('loginError');
+
+          try {
+            const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+              email: email,
+              password: pass,
+            });
+
+            if (error) throw error;
+
+            // Success
+            localStorage.setItem('babaLoggedIn', 'true'); // Keep as backup/legacy
+            window.location.href = 'index.html';
+
+          } catch (err) {
+            errorEl.textContent = err.message || 'Login failed! 😢';
+            errorEl.style.display = 'block';
+            setTimeout(() => errorEl.style.display = 'none', 3500);
+          }
+        }
+
+        // SIGNUP LOGIC
+        if (parentId === 'signupForm') {
+          const email = document.getElementById('signupEmail').value;
+          // Note: The original HTML had 'signupUsername' which looked like a text input but we need email for Supabase
+          // We might need to change the HTML input type to email or just treat it as one.
+          const pass = document.getElementById('signupPassword').value;
+          const name = document.getElementById('signupUsername').value; // Using this as name metadata
+
+          try {
+            const { data, error } = await window.supabaseClient.auth.signUp({
+              email: email,
+              password: pass,
+              options: {
+                data: {
+                  full_name: name,
+                },
+              },
+            });
+
+            if (error) throw error;
+
+            alert(`Welcome to Baba Music, ${name}! 🎉 Please check your email to verify!`);
+            localStorage.setItem('babaLoggedIn', 'true');
+            window.location.href = 'index.html';
+
+          } catch (err) {
+            alert('Signup Failed: ' + err.message);
+          }
+        }
+
+        // FORGOT PASSWORD
+        if (parentId === 'forgotForm') {
+          const email = document.getElementById('forgotEmail').value;
+          const el = document.getElementById('forgotMsg');
+
+          try {
+            const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email, {
+              redirectTo: window.location.origin + '/reset-password.html',
+            });
+            if (error) throw error;
+
+            el.textContent = `Reset link sent to ${email} ✅`;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 4000);
+          } catch (err) {
+            el.textContent = 'Error: ' + err.message;
+            el.style.display = 'block';
+            el.style.color = 'red';
+          }
+        }
+      });
+    });
+
+    // Auto-show signup if coming from #signup link
+    if (window.location.hash === '#signup') showSignup();
+  </script>
+</body>
+
+</html>

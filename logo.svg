@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
+  <circle cx="60" cy="60" r="56" fill="#1DB954"/>
+  <text x="60" y="48" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="32" fill="white">BM</text>
+  <path d="M38 62 C38 62, 44 58, 60 58 C76 58, 82 62, 82 62" stroke="white" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M44 72 C44 72, 50 68, 60 68 C70 68, 76 72, 76 72" stroke="white" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M50 81 C50 81, 54 78, 60 78 C66 78, 70 81, 70 81" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+</svg>

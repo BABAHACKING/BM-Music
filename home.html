@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #6200ea;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            margin: 2rem auto;
+            max-width: 800px;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 1rem;
+        }
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .upload-form label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        .upload-form input[type="file"] {
+            margin-bottom: 1rem;
+        }
+        .upload-form button {
+            background-color: #6200ea;
+            color: white;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .upload-form button:hover {
+            background-color: #3700b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Music World</h1>
+    </header>
+    <div class="container">
+        <h2>Upload Your Music</h2>
+        <form class="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+            <label for="musicFile">Choose a music file:</label>
+            <input type="file" id="musicFile" name="musicFile" accept="audio/*" required>
+            <button type="submit">Upload</button>
+        </form>
+        <div id="uploadMessage" style="margin-top: 1rem; font-size: 1rem; color: green;"></div>
+    </div>
+    <script>
+        document.querySelector('.upload-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent actual form submission
+
+            const uploadMessage = document.getElementById('uploadMessage');
+            const fileInput = document.getElementById('musicFile');
+
+            if (fileInput.files.length === 0) {
+                uploadMessage.style.color = 'red';
+                uploadMessage.textContent = 'Please select a file to upload.';
+                return;
+            }
+
+            const file = fileInput.files[0];
+
+            // Simulating upload process
+            uploadMessage.style.color = 'blue';
+            uploadMessage.textContent = `Uploading "${file.name}"...`;
+
+            setTimeout(() => {
+                uploadMessage.style.color = 'green';
+                uploadMessage.textContent = `"${file.name}" has been successfully uploaded!`;
+            }, 2000); // Simulate a 2-second upload delay
+        });
+    </script>
+</body>
+</html>

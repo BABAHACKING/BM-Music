@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arijit Singh Hits – Baba Music</title>
+    <link rel="stylesheet" href="utility.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="left" id="sidebar">
+            <div class="home bg-surface rounded-lg">
+                <div class="logo"><img src="logo.svg" alt="Baba Music"></div>
+                <ul>
+                    <li><a href="index.html"
+                            style="color:inherit;text-decoration:none;display:flex;gap:12px;align-items:center;"><img
+                                class="invert" src="home.svg" alt="">Home</a></li>
+                    <div class="search-bar">
+                        <span class="search-icon"></span>
+                        <input type="text" class="search-input" placeholder="Search songs...">
+                    </div>
+                </ul>
+            </div>
+
+            <div class="Library bg-surface rounded-lg">
+                <div class="heading">
+                    <img class="invert" src="playlist.svg" alt="">
+                    <h2>Arijit Hits Songs</h2>
+                </div>
+                <div class="songlist">
+                    <ul></ul>
+                </div>
+                <div class="footer">
+                    <div><a href="https://www.spotify.com/in-en/legal/">Legal</a></div>
+                    <div><a href="https://www.spotify.com/in-en/safetyandprivacy/">Safety & Privacy</a></div>
+                    <div><a href="https://www.spotify.com/in-en/legal/privacy-policy/">Privacy Policy</a></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="right">
+            <div class="header">
+                <div class="nav">
+                    <img class="hamburger" id="hamburgerBtn" src="hamburger.svg" alt="Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none"
+                        onclick="history.back()" style="cursor:pointer">
+                        <path d="M17 4L8.66943 10.0405C6.44352 11.6545 6.44353 12.3455 8.66943 13.9595L17 20"
+                            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none"
+                        onclick="history.forward()" style="cursor:pointer">
+                        <path d="M7 4L15.3306 10.0405C17.5565 11.6545 17.5565 12.3455 15.3306 13.9595L7 20"
+                            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <div class="button">
+                    <button class="Signupbtn">Sign up</button>
+                    <button class="Logingbtn"><a href="loging.html">Log in</a></button>
+                </div>
+            </div>
+
+            <div class="spotifyplaylists">
+                <!-- Playlist Hero -->
+                <div class="playlist-hero"
+                    style="background: linear-gradient(180deg, rgba(120, 40, 40, 0.6) 0%, var(--color-surface) 100%);">
+                    <img src="arjit hits.png" alt="Arijit Singh Hits">
+                    <div class="hero-info">
+                        <p>PLAYLIST</p>
+                        <h1>Arijit Singh Hits!</h1>
+                        <p class="hero-desc">Best soulful melodies from Arijit Singh</p>
+                        <p class="hero-count">2 songs</p>
+                    </div>
+                </div>
+
+                <!-- Playlist Controls & Songs -->
+                <div class="playlist-songs">
+                    <button class="play-all-btn" id="playAll">▶ Play All</button>
+                    <div class="songlist">
+                        <ul id="playlistSongs"></ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Play Bar -->
+    <div class="playBar" id="playbar">
+        <div class="abovebar">
+            <div class="songsinfo"></div>
+            <div class="songsbutton">
+                <img id="privious" src="privious.svg" alt="Previous">
+                <img id="play" src="play.svg" alt="Play">
+                <img id="next" src="next.svg" alt="Next">
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="songtime"></div>
+                <div class="volume">
+                    <img width="20" src="volume.svg" alt="Volume" class="invert">
+                    <div class="range">
+                        <input type="range" name="volume" min="0" max="100" value="50">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="seekbar">
+            <div class="circle"></div>
+        </div>
+    </div>
+
+    <script>
+        // Update hero from card click
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('img')) {
+            document.querySelector('.playlist-hero img').src = params.get('img');
+        }
+        if (params.get('title')) {
+            document.querySelector('.hero-info h1').textContent = params.get('title');
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="frontend-auth.js?v=999"></script>
+    <script src="theme.js?v=999"></script>
+    <script src="arjit-hits.js?v=999"></script>
+</body>
+
+</html>
