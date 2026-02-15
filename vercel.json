@@ -1,12 +1,11 @@
 {
     "version": 2,
-    "buildCommand": "npm install --prefix react-app && npm run build --prefix react-app",
-    "outputDirectory": "react-app/dist",
-    "framework": "vite",
+    "public": true,
+    "cleanUrls": true,
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/"
+            "destination": "/backend/public/$1"
         }
     ]
 }
