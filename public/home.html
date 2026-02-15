@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Music – Baba Music</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --card: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --accent: #1DB954;
+            --text: #ffffff;
+            --text-muted: #a1a1aa;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            margin-bottom: 8px;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 32px;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            border-color: var(--accent);
+        }
+
+        button {
+            background-color: var(--accent);
+            color: black;
+            padding: 16px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #uploadMessage {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 500;
+            min-height: 24px;
+        }
+
+        .error {
+            color: #ff5555;
+        }
+
+        .success {
+            color: var(--accent);
+        }
+
+        .back-link {
+            margin-top: 30px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Upload Song 🎵</h1>
+        <p class="subtitle">Share your vibes with the world</p>
+
+        <form class="upload-form" id="uploadForm">
+            <div class="field">
+                <label for="songTitle">Song Title</label>
+                <input type="text" id="songTitle" placeholder="e.g. Midnight City" required>
+            </div>
+            <div class="field">
+                <label for="artistName">Artist Name</label>
+                <input type="text" id="artistName" placeholder="e.g. M83" required>
+            </div>
+            <div class="field">
+                <label for="musicFile">Audio File (MP3)</label>
+                <input type="file" id="musicFile" accept="audio/*" required>
+            </div>
+            <button type="submit" id="uploadBtn">Upload Song 🚀</button>
+        </form>
+
+        <div id="uploadMessage"></div>
+    </div>
+
+    <a href="index.html" class="back-link">← Back to Player</a>
+
+    <!-- Supabase & Auth -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="frontend-auth.js"></script>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const msg = document.getElementById('uploadMessage');
+        const btn = document.getElementById('uploadBtn');
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            if (!window.supabaseClient) {
+                msg.textContent = "Error: Supabase not connected.";
+                msg.className = "error";
+                return;
+            }
+
+            // check auth
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (!session) {
+                msg.textContent = "Please log in to upload songs!";
+                msg.className = "error";
+                setTimeout(() => window.location.href = 'loging.html', 2000);
+                return;
+            }
+
+            const fileInput = document.getElementById('musicFile');
+            const titleInput = document.getElementById('songTitle');
+            const artistInput = document.getElementById('artistName');
+
+            if (fileInput.files.length === 0) return;
+
+            const file = fileInput.files[0];
+            const title = titleInput.value.trim();
+            const artist = artistInput.value.trim();
+
+            // Sanitize filename: remove spaces/special chars, add timestamp
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Date.now()}_${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.${fileExt}`;
+            const filePath = `${fileName}`; // Uploading to root of 'songs' bucket
+
+            try {
+                btn.textContent = "Uploading... ⏳";
+                btn.disabled = true;
+                msg.textContent = "";
+
+                // 1. Upload File
+                const { data: uploadData, error: uploadError } = await window.supabaseClient
+                    .storage
+                    .from('songs')
+                    .upload(filePath, file);
+
+                if (uploadError) throw uploadError;
+
+                // 2. Get Public URL
+                const { data: { publicUrl } } = window.supabaseClient
+                    .storage
+                    .from('songs')
+                    .getPublicUrl(filePath);
+
+                // 3. Insert Metadata into DB
+                const { error: dbError } = await window.supabaseClient
+                    .from('songs')
+                    .insert([
+                        {
+                            title: title,
+                            artist: artist,
+                            audio_url: publicUrl,
+                            // duration: 0 // Optional: if you calculate it
+                        }
+                    ]);
+
+                if (dbError) throw dbError;
+
+                msg.textContent = "Upload Successful! 🎉 Re-directing...";
+                msg.className = "success";
+
+                // Clear form
+                form.reset();
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Upload failed:', error);
+                msg.textContent = "Upload Failed: " + error.message;
+                msg.className = "error";
+            } finally {
+                btn.textContent = "Upload Song 🚀";
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
